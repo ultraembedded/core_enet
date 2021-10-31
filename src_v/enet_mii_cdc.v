@@ -260,7 +260,7 @@ wire wr_toggle_w;
 wire write_req_w = wr_i && !wr_busy_o;
 
 // Write storage for domain crossing
-(* ASYNC_REG = "TRUE" *) reg [WIDTH-1:0] wr_buffer_q;
+(* ASYNC_REG = "TRUE", DONT_TOUCH = "TRUE" *) reg [WIDTH-1:0] wr_buffer_q;
 
 always @ (posedge wr_clk_i or posedge wr_rst_i)
 if (wr_rst_i)
@@ -268,7 +268,7 @@ if (wr_rst_i)
 else if (write_req_w)
     wr_buffer_q <= wr_data_i;
 
-reg wr_toggle_q;
+(* DONT_TOUCH = "TRUE" *) reg wr_toggle_q;
 always @ (posedge wr_clk_i or posedge wr_rst_i)
 if (wr_rst_i)
     wr_toggle_q <= 1'b0;
@@ -301,7 +301,8 @@ u_sync_wr_toggle
 //-----------------------------------------------------------------
 // Read
 //-----------------------------------------------------------------
-reg rd_toggle_q;
+(* DONT_TOUCH = "TRUE" *) reg rd_toggle_q;
+
 always @ (posedge rd_clk_i or posedge rd_rst_i)
 if (rd_rst_i)
     rd_toggle_q <= 1'b0;
@@ -309,7 +310,7 @@ else
     rd_toggle_q <= rd_toggle_w;
 
 // Read storage for domain crossing
-(* ASYNC_REG = "TRUE" *) reg [WIDTH-1:0] rd_buffer_q;
+(* ASYNC_REG = "TRUE", DONT_TOUCH = "TRUE" *) reg [WIDTH-1:0] rd_buffer_q;
 
 always @ (posedge rd_clk_i or posedge rd_rst_i)
 if (rd_rst_i)
@@ -350,8 +351,8 @@ module enet_mii_cdc_resync
     output sync_o
 );
 
-(* ASYNC_REG = "TRUE" *) reg sync_ms;
-(* ASYNC_REG = "TRUE" *) reg sync_q;
+(* ASYNC_REG = "TRUE", DONT_TOUCH = "TRUE" *) reg sync_ms;
+(* ASYNC_REG = "TRUE", DONT_TOUCH = "TRUE" *) reg sync_q;
 
 always @ (posedge clk_i or posedge rst_i)
 if (rst_i)
